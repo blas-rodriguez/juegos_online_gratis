@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Menú de Juegos</title>
+    <title>Juegos Online Gratis - Menú</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         :root {
@@ -26,10 +26,76 @@
             background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
             color: var(--text);
             display: flex;
-            justify-content: center;
-            padding: 24px 12px;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 12px 24px;
         }
 
+        /* HEADER GENERAL CON LOGO */
+        .site-header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding: 10px 16px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, #bbf7d0, #22c55e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #022c22;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(34,197,94,0.5);
+        }
+
+        .brand-text-main {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.03em;
+        }
+
+        .brand-text-sub {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-tagline {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        @media (max-width: 700px) {
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .site-tagline {
+                text-align: left;
+            }
+        }
+
+        /* LAYOUT PRINCIPAL */
         .app {
             width: 100%;
             max-width: 1100px;
@@ -222,7 +288,7 @@
             box-shadow: none;
         }
 
-        /* Panel derecho: área de juego */
+        /* Panel derecho: área de juego / bienvenida */
         .game-area-header {
             display: flex;
             justify-content: space-between;
@@ -240,17 +306,33 @@
             color: var(--muted);
         }
 
-        .game-placeholder {
+        .welcome {
             border-radius: 14px;
             border: 1px dashed var(--border);
             padding: 18px 16px;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: var(--muted);
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7));
         }
 
-        .game-placeholder strong {
+        .welcome h2 {
+            margin: 0 0 8px;
+            font-size: 1.1rem;
             color: #e5e7eb;
+        }
+
+        .welcome p {
+            margin: 4px 0;
+        }
+
+        .welcome-list {
+            margin: 8px 0 0;
+            padding-left: 18px;
+            font-size: 0.86rem;
+        }
+
+        .welcome-list li {
+            margin-bottom: 3px;
         }
 
         .game-frame-wrapper {
@@ -281,145 +363,195 @@
 
         .hint {
             margin-top: 6px;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--muted);
         }
     </style>
 </head>
 <body>
-<div class="app">
-    <!-- Panel izquierdo: menú de juegos -->
-    <section class="panel">
-        <div class="pill">
-            <span class="pill-dot"></span>
-            Colección de minijuegos en JavaScript
-        </div>
-        <h1>Menú de Juegos</h1>
-        <p class="subtitle">
-            Elige un juego para comenzar. Más adelante se pueden agregar nuevos juegos reutilizando este mismo menú.
-        </p>
-
-        <div class="game-list">
-            <!-- Juego 1: Aventura en la Cueva -->
-            <article class="game-card">
-                <div class="game-header">
-                    <div class="game-title">Aventura en la Cueva</div>
-                    <div class="game-type">Aventura de texto</div>
-                </div>
-                <p class="game-desc">
-                    Explora una cueva misteriosa, tomá decisiones y descubrí distintos finales.
-                    Es ideal para practicar estados de juego y ramificación de historias.
-                </p>
-                <div class="tags">
-                    <span class="tag main">JavaScript</span>
-                    <span class="tag">Single Page</span>
-                    <span class="tag">Historia</span>
-                    <span class="tag">Elecciones</span>
-                </div>
-                <div class="game-footer">
-                    <div class="game-meta">
-                        <span>Estado: <strong>Completo</strong></span><br>
-                        <span>Finales: 3 principales + variaciones</span>
-                    </div>
-                    <button class="btn" data-game="aventura">
-                        ▶ Jugar
-                    </button>
-                </div>
-            </article>
-
-            <!-- Juego 2: Placeholder futuro -->
-            <!-- Juego 2: Adivina el Número -->
-            <article class="game-card">
-                <div class="game-header">
-                    <div class="game-title">Adivina el Número</div>
-                    <div class="game-type">Lógica / Números</div>
-                </div>
-                <p class="game-desc">
-                    La computadora elige un número al azar y tenés que descubrirlo.
-                    Vas recibiendo pistas: más alto o más bajo. Ideal para practicar condicionales.
-                </p>
-                <div class="tags">
-                    <span class="tag main">JavaScript</span>
-                    <span class="tag">Aleatorio</span>
-                    <span class="tag">Entrada de usuario</span>
-                </div>
-                <div class="game-footer">
-                    <div class="game-meta">
-                        <span>Estado: <strong>Completo</strong></span><br>
-                        <span>Rango: 1 a 20</span>
-                    </div>
-                    <button class="btn" data-game="numero">
-                        ▶ Jugar
-                    </button>
-                </div>
-            </article>
-
-        </div>
-    </section>
-
-    <!-- Panel derecho: área donde se carga el juego -->
-    <section class="panel">
-        <div class="game-area-header">
-            <div class="game-area-title">Zona de Juego</div>
-            <div class="game-area-subtitle" id="game-area-status">
-                Ningún juego cargado
+    <!-- HEADER GENERAL -->
+    <header class="site-header">
+        <div class="brand">
+            <div class="brand-logo">J</div>
+            <div class="brand-text">
+                <span class="brand-text-main">Juegos Online Gratis</span>
+                <span class="brand-text-sub">Mini juegos simples en JavaScript para aprender y divertirse.</span>
             </div>
         </div>
+        <div class="site-tagline">
+            Colección personal de ejemplos de programación.<br>
+            Podés usarlos, modificarlos y aprender.
+        </div>
+    </header>
 
-        <div id="game-placeholder" class="game-placeholder">
-            <strong>Bienvenido/a 👋</strong><br><br>
-            Selecciona un juego en la columna izquierda y se cargará aquí mismo.<br>
-            Por ahora está disponible <strong>"Aventura en la Cueva"</strong>, pero la idea
-            es ir sumando más juegos (todos en JavaScript) y usarlos como laboratorio de pruebas.
-            <p class="hint">
-                Tip: podés duplicar este archivo y adaptarlo para otras colecciones de proyectos (no solo juegos).
+    <div class="app">
+        <!-- Panel izquierdo: menú de juegos -->
+        <section class="panel">
+            <div class="pill">
+                <span class="pill-dot"></span>
+                Menú principal de juegos
+            </div>
+            <h1>Selecciona un juego</h1>
+            <p class="subtitle">
+                Elegí un juego de la lista. Se cargará en la zona de la derecha.  
+                Todos están hechos en HTML, CSS y JavaScript puro.
             </p>
-        </div>
 
-        <div id="game-frame-wrapper" class="game-frame-wrapper">
-            <iframe id="game-frame" title="Juego"></iframe>
-        </div>
-    </section>
-</div>
+            <div class="game-list">
+                <!-- Juego 1: Aventura en la Cueva -->
+                <article class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Aventura en la Cueva</div>
+                        <div class="game-type">Aventura de texto</div>
+                    </div>
+                    <p class="game-desc">
+                        Explora una cueva misteriosa, tomá decisiones y descubrí distintos finales.
+                        Ideal para practicar estados de juego y ramificación de historias.
+                    </p>
+                    <div class="tags">
+                        <span class="tag main">JavaScript</span>
+                        <span class="tag">Single Page</span>
+                        <span class="tag">Historia</span>
+                        <span class="tag">Elecciones</span>
+                    </div>
+                    <div class="game-footer">
+                        <div class="game-meta">
+                            <span>Estado: <strong>Completo</strong></span><br>
+                            <span>Finales: 3 principales + variaciones</span>
+                        </div>
+                        <button class="btn" data-game="aventura">
+                            ▶ Jugar
+                        </button>
+                    </div>
+                </article>
 
-<script>
-    const buttons = document.querySelectorAll('button[data-game]');
-    const frameWrapper = document.getElementById('game-frame-wrapper');
-    const frame = document.getElementById('game-frame');
-    const placeholder = document.getElementById('game-placeholder');
-    const status = document.getElementById('game-area-status');
+                <!-- Juego 2: Adivina el Número -->
+                <article class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">Adivina el Número</div>
+                        <div class="game-type">Lógica / Números</div>
+                    </div>
+                    <p class="game-desc">
+                        La computadora elige un número al azar y tenés que descubrirlo.
+                        Vas recibiendo pistas: más alto o más bajo. Ideal para practicar condicionales.
+                    </p>
+                    <div class="tags">
+                        <span class="tag main">JavaScript</span>
+                        <span class="tag">Aleatorio</span>
+                        <span class="tag">Entrada de usuario</span>
+                    </div>
+                    <div class="game-footer">
+                        <div class="game-meta">
+                            <span>Estado: <strong>Completo</strong></span><br>
+                            <span>Rango: 1 a 20</span>
+                        </div>
+                        <button class="btn" data-game="numero">
+                            ▶ Jugar
+                        </button>
+                    </div>
+                </article>
 
-    // Mapa de juegos -> archivos HTML
-    const gameFiles = {
-        aventura: 'aventura.html', // debe estar en el mismo directorio que index.html
-        numero: 'numero.html',     // nuevo juego: Adivina el Número
-    };
+                <!-- Placeholder: futuros juegos -->
+                <article class="game-card">
+                    <div class="game-header">
+                        <div class="game-title">[Próximo juego]</div>
+                        <div class="game-type">En diseño</div>
+                    </div>
+                    <p class="game-desc">
+                        Espacio reservado para el próximo minijuego (trivia, casino simple,
+                        simulador, etc.). Se integrará al mismo menú.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Pendiente</span>
+                        <span class="tag">Idea</span>
+                    </div>
+                    <div class="game-footer">
+                        <div class="game-meta">
+                            Próximamente
+                        </div>
+                        <button class="btn secondary disabled" disabled>
+                            Bloqueado
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const gameKey = btn.getAttribute('data-game');
-            const src = gameFiles[gameKey];
+        <!-- Panel derecho: área donde se carga el juego -->
+        <section class="panel">
+            <div class="game-area-header">
+                <div class="game-area-title">Zona de Juego</div>
+                <div class="game-area-subtitle" id="game-area-status">
+                    Pantalla de bienvenida
+                </div>
+            </div>
 
-            if (!src) {
-                alert('Juego aún no disponible.');
-                return;
-            }
+            <!-- Pantalla de bienvenida -->
+            <div id="welcome" class="welcome">
+                <h2>Bienvenido a <strong>Juegos Online Gratis</strong> 👋</h2>
+                <p>
+                    Este proyecto reúne varios juegos simples hechos en JavaScript, pensados para:
+                </p>
+                <ul class="welcome-list">
+                    <li>Aprender lógica y programación de forma práctica.</li>
+                    <li>Ver ejemplos claros de HTML, CSS y JS puro.</li>
+                    <li>Divertirse un rato probando ideas sencillas 😊.</li>
+                </ul>
+                <p>
+                    A la izquierda podés elegir un juego. Cuando hagas clic en
+                    <strong>"Jugar"</strong>, el juego se abrirá acá mismo.
+                </p>
+                <p class="hint">
+                    Tip: si estás viendo esto desde GitHub Pages, podés clonar el repo y modificar los juegos
+                    para experimentar con tu propio código.
+                </p>
+            </div>
 
-            // Cargar juego en el iframe
-            frame.src = src;
-            frameWrapper.classList.add('active');
-            placeholder.style.display = 'none';
+            <!-- Contenedor del iframe del juego -->
+            <div id="game-frame-wrapper" class="game-frame-wrapper">
+                <iframe id="game-frame" title="Juego"></iframe>
+            </div>
+        </section>
+    </div>
 
-            if (gameKey === 'aventura') {
-                status.textContent = 'Jugando: Aventura en la Cueva';
-            } else {
-                status.textContent = 'Jugando: ' + gameKey;
-            }
+    <script>
+        const buttons = document.querySelectorAll('button[data-game]');
+        const frameWrapper = document.getElementById('game-frame-wrapper');
+        const frame = document.getElementById('game-frame');
+        const status = document.getElementById('game-area-status');
+        const welcome = document.getElementById('welcome');
 
-            // Opcional: scroll suave hasta el área de juego (útil en mobile)
-            frameWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Mapa de juegos -> archivos HTML (mismo directorio que index.html)
+        const gameFiles = {
+            aventura: 'aventura.html',
+            numero: 'numero.html',
+        };
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const gameKey = btn.getAttribute('data-game');
+                const src = gameFiles[gameKey];
+
+                if (!src) {
+                    alert('Juego aún no disponible.');
+                    return;
+                }
+
+                // Cargar juego en el iframe
+                frame.src = src;
+                frameWrapper.classList.add('active');
+                welcome.style.display = 'none';
+
+                let nombreJuego = 'Juego';
+                if (gameKey === 'aventura') nombreJuego = 'Aventura en la Cueva';
+                if (gameKey === 'numero') nombreJuego = 'Adivina el Número';
+
+                status.textContent = 'Jugando: ' + nombreJuego;
+
+                // Scroll suave a la zona de juego (útil en mobile)
+                frameWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
