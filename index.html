@@ -328,28 +328,32 @@
             </article>
 
             <!-- Juego 2: Placeholder futuro -->
+            <!-- Juego 2: Adivina el Número -->
             <article class="game-card">
                 <div class="game-header">
-                    <div class="game-title">[Próximo juego]</div>
-                    <div class="game-type">En diseño</div>
+                    <div class="game-title">Adivina el Número</div>
+                    <div class="game-type">Lógica / Números</div>
                 </div>
                 <p class="game-desc">
-                    Espacio reservado para el próximo minijuego (ej: trivia, casino simple,
-                    simulador, etc.). Se integrará al mismo menú.
+                    La computadora elige un número al azar y tenés que descubrirlo.
+                    Vas recibiendo pistas: más alto o más bajo. Ideal para practicar condicionales.
                 </p>
                 <div class="tags">
-                    <span class="tag">Pendiente</span>
-                    <span class="tag">Idea</span>
+                    <span class="tag main">JavaScript</span>
+                    <span class="tag">Aleatorio</span>
+                    <span class="tag">Entrada de usuario</span>
                 </div>
                 <div class="game-footer">
                     <div class="game-meta">
-                        Próximamente
+                        <span>Estado: <strong>Completo</strong></span><br>
+                        <span>Rango: 1 a 20</span>
                     </div>
-                    <button class="btn secondary disabled" disabled>
-                        Bloqueado
+                    <button class="btn" data-game="numero">
+                        ▶ Jugar
                     </button>
                 </div>
             </article>
+
         </div>
     </section>
 
@@ -388,6 +392,7 @@
     // Mapa de juegos -> archivos HTML
     const gameFiles = {
         aventura: 'aventura.html', // debe estar en el mismo directorio que index.html
+        numero: 'numero.html',     // nuevo juego: Adivina el Número
     };
 
     buttons.forEach(btn => {
