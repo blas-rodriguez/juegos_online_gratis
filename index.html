@@ -354,4 +354,67 @@
     </section>
 
     <!-- Panel derecho: área donde se carga el juego -->
-    <section class="panel"
+    <section class="panel">
+        <div class="game-area-header">
+            <div class="game-area-title">Zona de Juego</div>
+            <div class="game-area-subtitle" id="game-area-status">
+                Ningún juego cargado
+            </div>
+        </div>
+
+        <div id="game-placeholder" class="game-placeholder">
+            <strong>Bienvenido/a 👋</strong><br><br>
+            Selecciona un juego en la columna izquierda y se cargará aquí mismo.<br>
+            Por ahora está disponible <strong>"Aventura en la Cueva"</strong>, pero la idea
+            es ir sumando más juegos (todos en JavaScript) y usarlos como laboratorio de pruebas.
+            <p class="hint">
+                Tip: podés duplicar este archivo y adaptarlo para otras colecciones de proyectos (no solo juegos).
+            </p>
+        </div>
+
+        <div id="game-frame-wrapper" class="game-frame-wrapper">
+            <iframe id="game-frame" title="Juego"></iframe>
+        </div>
+    </section>
+</div>
+
+<script>
+    const buttons = document.querySelectorAll('button[data-game]');
+    const frameWrapper = document.getElementById('game-frame-wrapper');
+    const frame = document.getElementById('game-frame');
+    const placeholder = document.getElementById('game-placeholder');
+    const status = document.getElementById('game-area-status');
+
+    // Mapa de juegos -> archivos HTML
+    const gameFiles = {
+        aventura: 'aventura.html', // debe estar en el mismo directorio que index.html
+    };
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const gameKey = btn.getAttribute('data-game');
+            const src = gameFiles[gameKey];
+
+            if (!src) {
+                alert('Juego aún no disponible.');
+                return;
+            }
+
+            // Cargar juego en el iframe
+            frame.src = src;
+            frameWrapper.classList.add('active');
+            placeholder.style.display = 'none';
+
+            if (gameKey === 'aventura') {
+                status.textContent = 'Jugando: Aventura en la Cueva';
+            } else {
+                status.textContent = 'Jugando: ' + gameKey;
+            }
+
+            // Opcional: scroll suave hasta el área de juego (útil en mobile)
+            frameWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+</script>
+</body>
+</html>
