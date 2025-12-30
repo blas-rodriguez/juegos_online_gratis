@@ -2,410 +2,356 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Aventura en la Cueva</title>
+    <title>Menú de Juegos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        :root {
+            --bg: #020617;
+            --bg-card: #0f172a;
+            --accent: #22c55e;
+            --accent-soft: rgba(34, 197, 94, 0.12);
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --border: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            margin: 0;
+            min-height: 100vh;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background-color: #111827;
-            color: #e5e7eb;
+            background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+            color: var(--text);
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            padding: 24px 12px;
         }
-        .game-container {
-            max-width: 700px;
+
+        .app {
             width: 100%;
-            background: #1f2937;
-            border-radius: 12px;
-            padding: 20px 24px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+            gap: 24px;
         }
+
+        @media (max-width: 900px) {
+            .app {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .panel {
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 18px;
+            padding: 20px 22px;
+            border: 1px solid var(--border);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.65);
+            backdrop-filter: blur(16px);
+        }
+
         h1 {
-            text-align: center;
-            margin-top: 0;
-            color: #fbbf24;
+            margin: 0 0 4px;
+            font-size: 1.7rem;
+            letter-spacing: 0.02em;
         }
-        #game-text {
-            white-space: pre-line;
-            line-height: 1.5;
-            margin-bottom: 16px;
+
+        .subtitle {
+            margin: 0 0 16px;
+            color: var(--muted);
+            font-size: 0.9rem;
         }
-        .choices {
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(15, 118, 110, 0.16);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            color: #67e8f9;
+            margin-bottom: 10px;
+        }
+
+        .pill-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+        }
+
+        .game-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .game-card {
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            background: linear-gradient(135deg, #020617, #020617);
             display: flex;
             flex-direction: column;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
         }
-        button {
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background-color: #2563eb;
-            color: white;
-            font-size: 14px;
-            text-align: left;
-            transition: transform 0.05s ease, box-shadow 0.05s ease, background-color 0.15s ease;
+
+        .game-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(34,197,94,0.16), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
         }
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
-            background-color: #1d4ed8;
+
+        .game-card:hover::before {
+            opacity: 1;
         }
-        button.secondary {
-            background-color: #4b5563;
-        }
-        button.secondary:hover {
-            background-color: #374151;
-        }
-        .input-row {
-            margin-top: 12px;
+
+        .game-header {
             display: flex;
+            align-items: baseline;
             gap: 8px;
         }
-        input[type="text"] {
-            flex: 1;
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: 1px solid #4b5563;
-            background-color: #111827;
+
+        .game-title {
+            font-weight: 600;
+            font-size: 0.98rem;
+        }
+
+        .game-type {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .game-desc {
+            font-size: 0.86rem;
+            color: var(--muted);
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            color: #cbd5f5;
+        }
+
+        .tag.main {
+            border-color: rgba(34, 197, 94, 0.6);
+            background: var(--accent-soft);
+            color: #bbf7d0;
+        }
+
+        .game-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            gap: 10px;
+        }
+
+        .game-meta {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #22c55e;
+            color: #022c22;
+            font-weight: 600;
+            box-shadow: 0 8px 18px rgba(34,197,94,0.45);
+            transform: translateY(0);
+            transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.12s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(34,197,94,0.6);
+            background: #16a34a;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 12px rgba(34,197,94,0.4);
+        }
+
+        .btn.secondary {
+            background: #1f2937;
+            color: var(--muted);
+            box-shadow: none;
+            border: 1px solid var(--border);
+        }
+
+        .btn.secondary:hover {
+            background: #111827;
             color: #e5e7eb;
         }
-        small {
-            color: #9ca3af;
+
+        .btn.disabled,
+        .btn[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Panel derecho: área de juego */
+        .game-area-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .game-area-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .game-area-subtitle {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .game-placeholder {
+            border-radius: 14px;
+            border: 1px dashed var(--border);
+            padding: 18px 16px;
+            font-size: 0.88rem;
+            color: var(--muted);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+        }
+
+        .game-placeholder strong {
+            color: #e5e7eb;
+        }
+
+        .game-frame-wrapper {
+            margin-top: 12px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #1f2937;
+            box-shadow: 0 14px 32px rgba(0,0,0,0.7);
+            display: none;
+        }
+
+        .game-frame-wrapper.active {
+            display: block;
+        }
+
+        iframe {
+            width: 100%;
+            height: 520px;
+            border: none;
+            background: #020617;
+        }
+
+        @media (max-width: 900px) {
+            iframe {
+                height: 480px;
+            }
+        }
+
+        .hint {
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: var(--muted);
         }
     </style>
 </head>
 <body>
-<div class="game-container">
-    <h1>Aventura en la Cueva</h1>
-    <div id="game-text"></div>
-    <div id="game-extra"></div>
-    <div class="choices" id="choices"></div>
-</div>
+<div class="app">
+    <!-- Panel izquierdo: menú de juegos -->
+    <section class="panel">
+        <div class="pill">
+            <span class="pill-dot"></span>
+            Colección de minijuegos en JavaScript
+        </div>
+        <h1>Menú de Juegos</h1>
+        <p class="subtitle">
+            Elige un juego para comenzar. Más adelante se pueden agregar nuevos juegos reutilizando este mismo menú.
+        </p>
 
-<script>
-    const gameText = document.getElementById('game-text');
-    const gameExtra = document.getElementById('game-extra');
-    const choicesDiv = document.getElementById('choices');
+        <div class="game-list">
+            <!-- Juego 1: Aventura en la Cueva -->
+            <article class="game-card">
+                <div class="game-header">
+                    <div class="game-title">Aventura en la Cueva</div>
+                    <div class="game-type">Aventura de texto</div>
+                </div>
+                <p class="game-desc">
+                    Explora una cueva misteriosa, tomá decisiones y descubrí distintos finales.
+                    Es ideal para practicar estados de juego y ramificación de historias.
+                </p>
+                <div class="tags">
+                    <span class="tag main">JavaScript</span>
+                    <span class="tag">Single Page</span>
+                    <span class="tag">Historia</span>
+                    <span class="tag">Elecciones</span>
+                </div>
+                <div class="game-footer">
+                    <div class="game-meta">
+                        <span>Estado: <strong>Completo</strong></span><br>
+                        <span>Finales: 3 principales + variaciones</span>
+                    </div>
+                    <button class="btn" data-game="aventura">
+                        ▶ Jugar
+                    </button>
+                </div>
+            </article>
 
-    const gameState = {
-        nombre: '',
-        llave: false,
-        finalizado: false,
-    };
+            <!-- Juego 2: Placeholder futuro -->
+            <article class="game-card">
+                <div class="game-header">
+                    <div class="game-title">[Próximo juego]</div>
+                    <div class="game-type">En diseño</div>
+                </div>
+                <p class="game-desc">
+                    Espacio reservado para el próximo minijuego (ej: trivia, casino simple,
+                    simulador, etc.). Se integrará al mismo menú.
+                </p>
+                <div class="tags">
+                    <span class="tag">Pendiente</span>
+                    <span class="tag">Idea</span>
+                </div>
+                <div class="game-footer">
+                    <div class="game-meta">
+                        Próximamente
+                    </div>
+                    <button class="btn secondary disabled" disabled>
+                        Bloqueado
+                    </button>
+                </div>
+            </article>
+        </div>
+    </section>
 
-    function setText(text) {
-        gameText.textContent = text;
-    }
-
-    function clearExtra() {
-        gameExtra.innerHTML = '';
-    }
-
-    function addChoice(label, onClick, options = {}) {
-        const btn = document.createElement('button');
-        btn.textContent = label;
-        if (options.secondary) btn.classList.add('secondary');
-        btn.onclick = onClick;
-        choicesDiv.appendChild(btn);
-    }
-
-    function clearChoices() {
-        choicesDiv.innerHTML = '';
-    }
-
-    // === ESCENAS ===
-
-    function escenaInicioNombre() {
-        gameState.llave = false;
-        gameState.finalizado = false;
-        setText(
-`Te despertás en una cueva oscura, solo con una antorcha casi apagada.
-No recordás cómo llegaste aquí.
-
-Antes de empezar... ¿cómo te llamás, aventurero/a?`
-        );
-        clearExtra();
-        clearChoices();
-
-        const row = document.createElement('div');
-        row.className = 'input-row';
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = 'Escribí tu nombre...';
-
-        const btn = document.createElement('button');
-        btn.textContent = 'Comenzar aventura';
-        btn.onclick = () => {
-            gameState.nombre = input.value.trim() || 'SinNombre';
-            escenaInicio();
-        };
-
-        row.appendChild(input);
-        row.appendChild(btn);
-        gameExtra.appendChild(row);
-    }
-
-    function escenaInicio() {
-        clearExtra();
-        setText(
-`Hola ${gameState.nombre}.
-Te despertás en una cueva oscura, solo con una antorcha casi apagada.
-A tu alrededor ves:
-
-1) Un pasillo hacia la izquierda (se escuchan gotas de agua).
-2) Un pasillo hacia la derecha (se siente un olor raro).
-3) Quedarte donde estás y observar mejor.`
-        );
-        clearChoices();
-        addChoice('1) Ir por el pasillo izquierdo', () => escenaPasilloIzquierda());
-        addChoice('2) Ir por el pasillo derecho', () => escenaPasilloDerecha());
-        addChoice('3) Observar mejor la sala inicial', () => escenaSalaInicial());
-    }
-
-    function escenaSalaInicial() {
-        clearExtra();
-        setText(
-`Mirás mejor tu alrededor, ${gameState.nombre}.
-Notás unas marcas en la pared que parecen flechas hacia la izquierda.
-
-1) Seguir las flechas (izquierda).
-2) Ignorarlas e ir a la derecha.`
-        );
-        clearChoices();
-        addChoice('1) Seguir las flechas a la izquierda', () => escenaPasilloIzquierda());
-        addChoice('2) Ir al pasillo derecho', () => escenaPasilloDerecha(), { secondary: true });
-    }
-
-    function escenaPasilloIzquierda() {
-        clearExtra();
-        setText(
-`Caminás por el pasillo de la izquierda.
-El eco de tus pasos resuena en la cueva.
-
-Tras unos metros encontrás:
-- Una puerta de madera muy vieja.
-- Una pequeña mesa con algo brillando encima.
-
-1) Revisar la mesa.
-2) Intentar abrir la puerta.
-3) Volver atrás.`
-        );
-        clearChoices();
-        addChoice('1) Revisar la mesa', () => escenaMesaLlave());
-        addChoice('2) Ir a la puerta de madera', () => escenaPuertaMadera());
-        addChoice('3) Volver a la sala inicial', () => escenaInicio(), { secondary: true });
-    }
-
-    function escenaMesaLlave() {
-        clearExtra();
-        if (gameState.llave) {
-            setText(
-`Te acercás a la mesa.
-
-Sobre la mesa ya no hay nada nuevo.
-La llave oxidada ya la tenés contigo.`
-            );
-            clearChoices();
-            addChoice('Volver al pasillo', () => escenaPasilloIzquierda());
-            return;
-        }
-
-        setText(
-`Te acercás a la mesa.
-Ves una pequeña llave oxidada.
-
-1) Tomar la llave.
-2) No tocar nada y volver.`
-        );
-        clearChoices();
-        addChoice('1) Tomar la llave oxidada', () => {
-            gameState.llave = true;
-            setText(
-`Tomás la llave oxidada.
-
-(¡Podría servir para alguna puerta!)
-
-Volvés al pasillo.`
-            );
-            clearChoices();
-            addChoice('Continuar', () => escenaPasilloIzquierda());
-        });
-        addChoice('2) Volver al pasillo sin tocar la llave', () => escenaPasilloIzquierda(), { secondary: true });
-    }
-
-    function escenaPuertaMadera() {
-        clearExtra();
-        if (gameState.llave) {
-            setText(
-`Te parás frente a la puerta de madera.
-
-Usás la llave oxidada para intentar abrirla...
-
-*CLACK*
-
-La cerradura cede y abrís la puerta lentamente.`
-            );
-            clearChoices();
-            addChoice('Entrar a la sala', () => escenaSalaTesoro());
-        } else {
-            setText(
-`Te parás frente a la puerta de madera.
-
-Intentás abrirla, pero está trabada y tiene una cerradura.
-No parecés tener ninguna llave para abrirla.`
-            );
-            clearChoices();
-            addChoice('Volver al pasillo', () => escenaPasilloIzquierda());
-        }
-    }
-
-    function escenaSalaTesoro() {
-        clearExtra();
-        setText(
-`Entrás a una sala iluminada por cristales en el techo.
-En el centro hay un cofre antiguo.
-
-1) Abrir el cofre.
-2) Volver a la puerta e irte.`
-        );
-        clearChoices();
-        addChoice('1) Abrir el cofre', () => escenaCofre());
-        addChoice('2) Volver al pasillo', () => escenaPasilloIzquierda(), { secondary: true });
-    }
-
-    function escenaCofre() {
-        clearExtra();
-        setText(
-`Te acercás al cofre, ${gameState.nombre}.
-Lo abrís lentamente...
-
-Dentro encontrás monedas de oro, joyas
-y un mapa que indica una salida secreta de la cueva.
-
-¡Has encontrado el TESORO y escapado con vida!
-
-========== FINAL BUENO ==========
-`
-        );
-        gameState.finalizado = true;
-        mostrarReinicio();
-    }
-
-    function escenaPasilloDerecha() {
-        clearExtra();
-        setText(
-`Tomás el pasillo de la derecha.
-El olor raro se hace cada vez más fuerte.
-Escuchás un gruñido a lo lejos...
-
-1) Seguir avanzando.
-2) Volver a la zona inicial.`
-        );
-        clearChoices();
-        addChoice('1) Seguir avanzando', () => escenaGuaridaMonstruo());
-        addChoice('2) Volver a la sala inicial', () => escenaInicio(), { secondary: true });
-    }
-
-    function escenaGuaridaMonstruo() {
-        clearExtra();
-        setText(
-`Llegás a una sala amplia.
-Un monstruo enorme te observa desde la oscuridad.
-Sus ojos rojos brillan.
-
-1) Intentar hablar con el monstruo.
-2) Salir corriendo.
-3) Tomar una piedra del suelo y atacar.`
-        );
-        clearChoices();
-        addChoice('1) Hablar con el monstruo', () => escenaHablarMonstruo());
-        addChoice('2) Salir corriendo', () => escenaHuirMonstruo());
-        addChoice('3) Atacar al monstruo con una piedra', () => escenaAtacarMonstruo());
-    }
-
-    function escenaHablarMonstruo() {
-        clearExtra();
-        setText(
-`Te armás de valor y le hablás al monstruo:
-
-"No quiero hacerte daño, solo busco salir de aquí" - decís.
-
-El monstruo te mira fijamente... y comienza a reír.
-Resulta ser un guardián aburrido.
-
-Te señala un pasillo secreto que lleva fuera de la cueva.
-
-¡Has escapado gracias a tu valentía y diálogo!
-
-========== FINAL DIPLOMÁTICO ==========
-`
-        );
-        gameState.finalizado = true;
-        mostrarReinicio();
-    }
-
-    function escenaHuirMonstruo() {
-        clearExtra();
-        setText(
-`Das media vuelta y corrés tan rápido como podés...
-Pero tropezás con una roca y caés.
-
-El monstruo se acerca...
-
-FIN.
-El miedo te jugó en contra, ${gameState.nombre}.
-
-========== FINAL MALO ==========
-`
-        );
-        gameState.finalizado = true;
-        mostrarReinicio();
-    }
-
-    function escenaAtacarMonstruo() {
-        clearExtra();
-        setText(
-`Tomás una piedra y corrés hacia el monstruo gritando.
-
-El monstruo se sorprende por tu ataque.
-Retrocede y deja descubierta una puerta detrás suyo.
-
-Aprovechás la confusión y te colás por la puerta.
-
-Del otro lado encontrás un túnel que lleva a la superficie.
-Has escapado por pura osadía.
-
-========== FINAL HEROICO ==========
-`
-        );
-        gameState.finalizado = true;
-        mostrarReinicio();
-    }
-
-    function mostrarReinicio() {
-        clearExtra();
-        clearChoices();
-        addChoice('Jugar de nuevo', () => escenaInicioNombre());
-        addChoice('Salir del juego', () => escenaSalir(), { secondary: true });
-    }
-
-    function escenaSalir() {
-        clearExtra();
-        setText(
-`Gracias por jugar, ${gameState.nombre}.
-
-Cerrá la pestaña o recargá la página si querés volver a empezar más adelante.`
-        );
-        clearChoices();
-    }
-
-    // Inicia el juego
-    escenaInicioNombre();
-</script>
-</body>
-</html>
+    <!-- Panel derecho: área donde se carga el juego -->
+    <section class="panel"
