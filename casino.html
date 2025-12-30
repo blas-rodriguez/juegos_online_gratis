@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Casino - Tragamonedas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --bg: #020617;
+            --panel: #0f172a;
+            --border: #1f2937;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --accent: #22c55e;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 10px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--panel);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 22px 24px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: #fbbf24;
+        }
+
+        .subtitle {
+            margin-top: 4px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .tags {
+            margin-top: 10px;
+            display: inline-flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            color: #cbd5f5;
+        }
+
+        .tag.main {
+            border-color: rgba(34, 197, 94, 0.6);
+            background: rgba(34, 197, 94, 0.12);
+            color: #bbf7d0;
+        }
+
+        .panel {
+            background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.7));
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 16px 18px 14px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .status-label {
+            color: var(--muted);
+        }
+
+        .status-value {
+            font-weight: 600;
+        }
+
+        .status-win {
+            color: #22c55e;
+        }
+
+        .status-lose {
+            color: #f97316;
+        }
+
+        .machine {
+            margin-top: 10px;
+            background: radial-gradient(circle at top, #020617, #020617);
+            border-radius: 16px;
+            border: 1px solid #111827;
+            padding: 14px 10px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .machine::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(251,191,36,0.16), transparent 60%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .reels {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .reel {
+            background: #020617;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            padding: 16px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reel.spin {
+            animation: spin 0.4s ease-in-out;
+        }
+
+        @keyframes spin {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-8px); }
+            50% { transform: translateY(4px); }
+            75% { transform: translateY(-2px); }
+            100% { transform: translateY(0); }
+        }
+
+        .reel-label {
+            position: absolute;
+            bottom: 3px;
+            right: 8px;
+            font-size: 0.65rem;
+            color: var(--muted);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .controls-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.82rem;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        select, input[type="number"] {
+            padding: 6px 8px;
+            border-radius: 999px;
+            border: 1px solid #4b5563;
+            background: #020617;
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+
+        button {
+            border-radius: 999px;
+            border: none;
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #22c55e;
+            color: #022c22;
+            font-weight: 600;
+            box-shadow: 0 8px 18px rgba(34,197,94,0.45);
+            transform: translateY(0);
+            transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.12s ease;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(34,197,94,0.6);
+            background: #16a34a;
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 12px rgba(34,197,94,0.4);
+        }
+
+        button.secondary {
+            background: #1f2937;
+            color: var(--muted);
+            box-shadow: none;
+            border: 1px solid #374151;
+        }
+
+        button.secondary:hover {
+            background: #111827;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .hint {
+            margin-top: 8px;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .rules {
+            margin-top: 14px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .rules ul {
+            margin: 4px 0 0;
+            padding-left: 18px;
+        }
+
+        .rules li {
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <header>
+        <h1>Mini Casino 🎰</h1>
+        <p class="subtitle">
+            Tragamonedas simple: elegís tu apuesta, girás y ves si ganás fichas.
+        </p>
+        <div class="tags">
+            <span class="tag main">Casino</span>
+            <span class="tag">Azar</span>
+            <span class="tag">Probabilidad</span>
+        </div>
+    </header>
+
+    <div class="panel">
+        <div class="status-row">
+            <div>
+                <span class="status-label">Saldo:</span>
+                <span class="status-value" id="saldo">$ 0</span>
+            </div>
+            <div>
+                <span class="status-label">Último resultado:</span>
+                <span class="status-value" id="resultado">-</span>
+            </div>
+        </div>
+
+        <div class="machine">
+            <div class="reels">
+                <div class="reel" id="reel1">
+                    <span class="symbol">🍒</span>
+                    <span class="reel-label">R1</span>
+                </div>
+                <div class="reel" id="reel2">
+                    <span class="symbol">🍋</span>
+                    <span class="reel-label">R2</span>
+                </div>
+                <div class="reel" id="reel3">
+                    <span class="symbol">⭐</span>
+                    <span class="reel-label">R3</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="controls-group">
+                <span>Apuesta</span>
+                <div class="controls-row">
+                    <select id="apuesta-select">
+                        <option value="5">5 fichas</option>
+                        <option value="10" selected>10 fichas</option>
+                        <option value="20">20 fichas</option>
+                        <option value="50">50 fichas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <span>&nbsp;</span>
+                <div class="controls-row">
+                    <button id="spin-btn">Girar 🎲</button>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <span>&nbsp;</span>
+                <div class="controls-row">
+                    <button id="reset-btn" class="secondary">Reiniciar saldo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hint">
+            Nota: este casino es solo de práctica y diversión. No hay dinero real.
+        </div>
+
+        <div class="rules">
+            <strong>Reglas:</strong>
+            <ul>
+                <li>Empezás con 100 fichas.</li>
+                <li>Cada giro descuenta tu apuesta del saldo.</li>
+                <li>3 símbolos iguales pagan más que 2.</li>
+                <li>Si te quedás sin fichas, podés reiniciar el saldo.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    const saldoEl = document.getElementById('saldo');
+    const resultadoEl = document.getElementById('resultado');
+    const reelEls = [
+        document.getElementById('reel1'),
+        document.getElementById('reel2'),
+        document.getElementById('reel3'),
+    ];
+    const apuestaSelect = document.getElementById('apuesta-select');
+    const spinBtn = document.getElementById('spin-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    const symbols = [
+        { icon: '🍒', name: 'Cerezas', payout3: 5, payout2: 2 },
+        { icon: '🍋', name: 'Limón',   payout3: 4, payout2: 2 },
+        { icon: '⭐',  name: 'Estrella', payout3: 8, payout2: 3 },
+        { icon: '7️⃣', name: 'Siete',  payout3: 12, payout2: 5 },
+    ];
+
+    const game = {
+        saldo: 100,
+        enJuego: false,
+    };
+
+    function actualizarSaldo() {
+        saldoEl.textContent = '$ ' + game.saldo;
+    }
+
+    function setResultado(texto, tipo = '') {
+        resultadoEl.textContent = texto;
+        resultadoEl.classList.remove('status-win', 'status-lose');
+        if (tipo === 'win') resultadoEl.classList.add('status-win');
+        if (tipo === 'lose') resultadoEl.classList.add('status-lose');
+    }
+
+    function inicializarMaquina() {
+        actualizarSaldo();
+        setResultado('Esperando giro...');
+        reelEls.forEach((reel, i) => {
+            const span = reel.querySelector('.symbol');
+            span.textContent = symbols[i % symbols.length].icon;
+        });
+    }
+
+    function obtenerApuesta() {
+        const val = Number(apuestaSelect.value);
+        return Number.isNaN(val) ? 10 : val;
+    }
+
+    function girar() {
+        if (game.enJuego) return;
+
+        const apuesta = obtenerApuesta();
+
+        if (apuesta <= 0) {
+            setResultado('La apuesta debe ser mayor que 0.');
+            return;
+        }
+
+        if (apuesta > game.saldo) {
+            setResultado('No tenés fichas suficientes para esa apuesta.', 'lose');
+            return;
+        }
+
+        game.enJuego = true;
+        game.saldo -= apuesta;
+        actualizarSaldo();
+        setResultado('Girando...');
+
+        // Animación simple
+        reelEls.forEach(reel => {
+            reel.classList.add('spin');
+        });
+
+        setTimeout(() => {
+            // Quitar animación
+            reelEls.forEach(reel => reel.classList.remove('spin'));
+
+            // Generar símbolos aleatorios
+            const resultados = [];
+            reelEls.forEach((reel, i) => {
+                const idx = Math.floor(Math.random() * symbols.length);
+                const symbol = symbols[idx];
+                resultados.push(symbol);
+                reel.querySelector('.symbol').textContent = symbol.icon;
+            });
+
+            // Calcular premio
+            const premio = calcularPremio(resultados, apuesta);
+            if (premio > 0) {
+                game.saldo += premio;
+                actualizarSaldo();
+                setResultado(
+                    `¡Ganaste ${premio} fichas!`,
+                    'win'
+                );
+            } else {
+                setResultado(`Perdiste la apuesta de ${apuesta} fichas.`, 'lose');
+            }
+
+            if (game.saldo <= 0) {
+                setResultado('Te quedaste sin fichas. Reiniciá el saldo para seguir jugando.', 'lose');
+                game.saldo = 0;
+                actualizarSaldo();
+            }
+
+            game.enJuego = false;
+        }, 450);
+    }
+
+    function calcularPremio(resultados, apuestaBase) {
+        const [a, b, c] = resultados;
+
+        // 3 iguales
+        if (a.icon === b.icon && b.icon === c.icon) {
+            return apuestaBase * a.payout3;
+        }
+
+        // 2 iguales (cualquier par)
+        if (a.icon === b.icon || a.icon === c.icon || b.icon === c.icon) {
+            const simboloPar = a.icon === b.icon ? a : (a.icon === c.icon ? a : b);
+            return Math.floor(apuestaBase * simboloPar.payout2);
+        }
+
+        // Nada
+        return 0;
+    }
+
+    function resetSaldo() {
+        game.saldo = 100;
+        actualizarSaldo();
+        setResultado('Saldo reiniciado a 100 fichas.');
+    }
+
+    spinBtn.addEventListener('click', girar);
+    resetBtn.addEventListener('click', resetSaldo);
+
+    // Permitir usar Enter para girar cuando el select tiene foco
+    apuestaSelect.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            girar();
+        }
+    });
+
+    inicializarMaquina();
+</script>
+</body>
+</html>

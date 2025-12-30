@@ -451,29 +451,32 @@
                     </div>
                 </article>
 
-                <!-- Placeholder: futuros juegos -->
+                <!-- Juego 3: Mini Casino -->
                 <article class="game-card">
                     <div class="game-header">
-                        <div class="game-title">[Próximo juego]</div>
-                        <div class="game-type">En diseño</div>
+                        <div class="game-title">Mini Casino</div>
+                        <div class="game-type">Tragamonedas</div>
                     </div>
                     <p class="game-desc">
-                        Espacio reservado para el próximo minijuego (trivia, casino simple,
-                        simulador, etc.). Se integrará al mismo menú.
+                        Un tragamonedas simple: elegís tu apuesta, girás y tratás de sumar fichas.
+                        Ideal para practicar azar, probabilidad y lógica básica.
                     </p>
                     <div class="tags">
-                        <span class="tag">Pendiente</span>
-                        <span class="tag">Idea</span>
+                        <span class="tag main">JavaScript</span>
+                        <span class="tag">Casino</span>
+                        <span class="tag">Azar</span>
                     </div>
                     <div class="game-footer">
                         <div class="game-meta">
-                            Próximamente
+                            <span>Estado: <strong>Completo</strong></span><br>
+                            <span>Saldo inicial: 100 fichas</span>
                         </div>
-                        <button class="btn secondary disabled" disabled>
-                            Bloqueado
+                        <button class="btn" data-game="casino">
+                            ▶ Jugar
                         </button>
                     </div>
                 </article>
+
             </div>
         </section>
 
@@ -525,7 +528,9 @@
         const gameFiles = {
             aventura: 'aventura.html',
             numero: 'numero.html',
+            casino: 'casino.html', // nuevo juego
         };
+
 
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -545,6 +550,8 @@
                 let nombreJuego = 'Juego';
                 if (gameKey === 'aventura') nombreJuego = 'Aventura en la Cueva';
                 if (gameKey === 'numero') nombreJuego = 'Adivina el Número';
+                if (gameKey === 'casino') nombreJuego = 'Mini Casino';
+
 
                 status.textContent = 'Jugando: ' + nombreJuego;
 
